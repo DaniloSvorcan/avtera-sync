@@ -144,10 +144,11 @@ class Avtera_Product_Sync {
             }
         }
 
-        // Galerija — samo za nove proizvode
-        if ( $is_new && ! empty( $data['gallery'] ) ) {
+        // Galerija — uvoz ako je trenutno prazna
+        $existing_gallery = $product->get_gallery_image_ids();
+        if ( empty( $existing_gallery ) && ! empty( $data['gallery'] ) ) {
             $gallery_ids = [];
-            foreach ( array_slice( $data['gallery'], 0, 5 ) as $url ) {
+            foreach ( array_slice( $data['gallery'], 0, 9 ) as $url ) {
                 $img_id = $this->sideload_image( $url, $product_id, $data['name'] );
                 if ( $img_id ) {
                     $gallery_ids[] = $img_id;
