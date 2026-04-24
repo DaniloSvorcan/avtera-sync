@@ -60,7 +60,7 @@ class Avtera_Admin {
                 <div class="notice notice-info">
                     <p>
                         <strong>Poslednja sinhronizacija:</strong>
-                        <?php echo $last_sync ? esc_html( date_i18n( 'd.m.Y H:i', $last_sync ) ) : '—'; ?> &nbsp;|&nbsp;
+                        <?php echo $last_sync ? esc_html( wp_date( 'd.m.Y H:i', $last_sync ) ) : '—'; ?> &nbsp;|&nbsp;
                         Kreirano: <strong><?php echo (int) $last_result['created']; ?></strong> &nbsp;|&nbsp;
                         Ažurirano: <strong><?php echo (int) $last_result['updated']; ?></strong> &nbsp;|&nbsp;
                         Greške: <strong><?php echo count( $last_result['errors'] ); ?></strong>
