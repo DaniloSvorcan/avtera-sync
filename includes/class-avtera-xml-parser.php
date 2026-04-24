@@ -46,10 +46,10 @@ class Avtera_XML_Parser {
     }
 
     private function parse_product( SimpleXMLElement $item ): array {
-        // Galerija slika
+        // Galerija slika (child elementi: dodatnaSlika1, dodatnaSlika2, ...)
         $gallery = [];
-        if ( isset( $item->dodatneSlike->slika ) ) {
-            foreach ( $item->dodatneSlike->slika as $slika ) {
+        if ( isset( $item->dodatneSlike ) ) {
+            foreach ( $item->dodatneSlike->children() as $slika ) {
                 $url = trim( (string) $slika );
                 if ( $url ) {
                     $gallery[] = $url;
