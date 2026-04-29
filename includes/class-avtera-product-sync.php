@@ -32,6 +32,8 @@ class Avtera_Product_Sync {
         'Prenosniki - zmogljivi 15 in+/38 cm+ zaslon'                              => 'Prenosni računalniki',
         'Prenosniki - zmogljivi Intel 14 in+/36 cm+ zaslon'                        => 'Prenosni računalniki',
         'Prenosniki - zmogljivi Intel 15 in+/38 cm+ zaslon'                        => 'Prenosni računalniki',
+        'Prenosniki - zmogljivi 17 in+/43 cm+ zaslon'                              => 'Prenosni računalniki',
+        'Prenosniki - zmogljivi 13 in+/33 cm+ zaslon'                              => 'Prenosni računalniki',
         // Namizni računalniki
         'Računalniki - poslovni Intel platforma'                                    => 'Namizni računalniki',
         'Računalniki - poslovni AMD platforma'                                      => 'Namizni računalniki',
