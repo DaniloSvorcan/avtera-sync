@@ -9,6 +9,45 @@ class Avtera_Product_Sync {
         'errors'  => [],
     ];
 
+    // Mapiranje Avtera kategorija → naše WooCommerce kategorije
+    private array $category_map = [
+        // Prenosni računalniki
+        'Consumer osnovni (Laptop, Pavilion, X360) 13 in-/33 cm- zaslon'          => 'Prenosni računalniki',
+        'Consumer osnovni (Laptop, Pavilion, X360) 14 in+/36 cm+ zaslon'          => 'Prenosni računalniki',
+        'Consumer osnovni (Laptop, Pavilion, X360) 15 in+/38 cm+ zaslon'          => 'Prenosni računalniki',
+        'Consumer osnovni (Laptop, Pavilion, X360) 17 in+/43 cm+ zaslon'          => 'Prenosni računalniki',
+        'Consumer zmogljivi (Envy, Spectre, Omnibook) 14 in+/36 cm+ zaslon'       => 'Prenosni računalniki',
+        'Consumer zmogljivi (Envy, Spectre, Omnibook) 15 in+/38 cm+ zaslon'       => 'Prenosni računalniki',
+        'Prenosniki - osnovni 15 in+/38 cm+ zaslon'                                => 'Prenosni računalniki',
+        'Prenosniki - osnovni 17 in+/43 cm+ zaslon'                                => 'Prenosni računalniki',
+        'Prenosniki - poslovni 13 in+/33 cm+ zaslon'                               => 'Prenosni računalniki',
+        'Prenosniki - poslovni 14 in+/36 cm+ zaslon'                               => 'Prenosni računalniki',
+        'Prenosniki - poslovni 15 in+/38 cm+ zaslon'                               => 'Prenosni računalniki',
+        'Prenosniki - gaming 15 in+/38 cm+ zaslon'                                 => 'Prenosni računalniki',
+        'Prenosniki - gaming 17 in+/43 cm+ zaslon'                                 => 'Prenosni računalniki',
+        'Prenosniki - delovne postaje 14 in+/36 cm+ zaslon'                        => 'Prenosni računalniki',
+        'Prenosniki - delovne postaje 15 in+/38 cm+ zaslon'                        => 'Prenosni računalniki',
+        'Prenosniki - delovne postaje 17 in+/43 cm+ zaslon'                        => 'Prenosni računalniki',
+        'Prenosniki - zmogljivi 14 in+/36 cm+ zaslon'                              => 'Prenosni računalniki',
+        'Prenosniki - zmogljivi 15 in+/38 cm+ zaslon'                              => 'Prenosni računalniki',
+        'Prenosniki - zmogljivi Intel 14 in+/36 cm+ zaslon'                        => 'Prenosni računalniki',
+        'Prenosniki - zmogljivi Intel 15 in+/38 cm+ zaslon'                        => 'Prenosni računalniki',
+        // Namizni računalniki
+        'Računalniki - poslovni Intel platforma'                                    => 'Namizni računalniki',
+        'Računalniki - poslovni AMD platforma'                                      => 'Namizni računalniki',
+        'Računalniki - zmogljivi Intel platforma'                                   => 'Namizni računalniki',
+        // AIO računalniki
+        'Računalniki - All in One'                                                  => 'AIO računalniki',
+        // Računalniška periferija
+        'Dodatki za računalnike Dodatki splošno'                                    => 'Računalniška periferija',
+        'Dodatki za računalnike Dodatki-prenosni računalniki'                       => 'Računalniška periferija',
+        // Priklopne postaje
+        'Dodatki za računalnike Priklopne postaje'                                  => 'Priklopne postaje',
+        // Strežniki
+        'Strežniki'                                                                 => 'Strežniki',
+        'Dodatki za strežnike'                                                      => 'Strežniki',
+    ];
+
     public function run( array $products ): array {
         $this->results = [ 'created' => 0, 'updated' => 0, 'errors' => [] ];
 
@@ -118,17 +157,17 @@ class Avtera_Product_Sync {
     }
 
     private function get_or_create_category( string $name ): ?int {
-        $term = get_term_by( 'name', $name, 'product_cat' );
-        if ( $term ) {
-            return $term->term_id;
+        // Primijeni mapping — koristi našu kategoriju, nikad Avterinu
+        $mapped_name = $this->category_map[ $name ] ?? null;
+
+        if ( $mapped_name ) {
+            // Samo traži — NIKAD ne kreira kategoriju
+            $term = get_term_by( 'name', $mapped_name, 'product_cat' );
+            return $term ? $term->term_id : null;
         }
 
-        $result = wp_insert_term( $name, 'product_cat' );
-        if ( is_wp_error( $result ) ) {
-            return null;
-        }
-
-        return (int) $result['term_id'];
+        // Nije u mappingu — ignoriši, ne kreira ništa
+        return null;
     }
 
     private function handle_images( int $product_id, array $data, bool $is_new ): void {
